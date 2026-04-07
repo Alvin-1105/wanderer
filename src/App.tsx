@@ -21,7 +21,8 @@ type View =
   | 'add-destination' 
   | 'city-details' 
   | 'add-activity' 
-  | 'add-transportation';
+  | 'add-transportation'
+  | 'ai-wizard';
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -117,6 +118,11 @@ export default function App() {
   const navigateToEditTrip = (tripId?: string) => {
     if (tripId) setSelectedTripId(tripId);
     setCurrentView('edit-trip');
+  };
+
+  const navigateToAITrip = () => {
+    setSelectedTripId(null);
+    setCurrentView('ai-wizard');
   };
 
   const navigateToAddDestination = (destId?: string) => {
@@ -289,6 +295,7 @@ export default function App() {
             trips={trips} 
             onTripClick={navigateToTripDetails}
             onAddTrip={() => navigateToEditTrip()}
+            onAddAITrip={() => navigateToAITrip()}
             onDeleteTrip={handleDeleteTrip}
           />
         )}
@@ -377,6 +384,18 @@ export default function App() {
             onSave={handleSaveItem}
             onDelete={() => handleDeleteItem(selectedItemId!)}
           />
+        )}
+        {currentView === 'ai-wizard' && (
+          <div className="min-h-screen bg-surface flex flex-col items-center justify-center p-8">
+            <h1 className="text-3xl font-bold mb-4 font-display">AI Trip Wizard</h1>
+            <p className="text-secondary mb-8">This feature is under development (Step 2).</p>
+            <button 
+              onClick={() => setCurrentView('my-trips')}
+              className="px-6 py-3 bg-accent text-white rounded-full font-semibold"
+            >
+              Go Back
+            </button>
+          </div>
         )}
       </AnimatePresence>
     </div>

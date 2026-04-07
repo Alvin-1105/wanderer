@@ -4,15 +4,18 @@ import { Trip } from '../types';
 import { TripCard } from '../components/TripCard';
 import { Layout } from '../components/Layout';
 import { Header } from '../components/Header';
+import { AIChoiceModal } from '../components/AIChoiceModal';
 
 interface MyTripsScreenProps {
   trips: Trip[];
   onTripClick: (tripId: string) => void;
   onAddTrip: () => void;
+  onAddAITrip: () => void;
   onDeleteTrip: (tripId: string) => void;
 }
 
-export const MyTripsScreen: React.FC<MyTripsScreenProps> = ({ trips, onTripClick, onAddTrip, onDeleteTrip }) => {
+export const MyTripsScreen: React.FC<MyTripsScreenProps> = ({ trips, onTripClick, onAddTrip, onAddAITrip, onDeleteTrip }) => {
+  const [showAIModal, setShowAIModal] = React.useState(false);
   return (
     <div className="min-h-screen bg-surface">
       <Header 
@@ -30,7 +33,7 @@ export const MyTripsScreen: React.FC<MyTripsScreenProps> = ({ trips, onTripClick
           ))}
           
           <button 
-            onClick={onAddTrip}
+            onClick={() => setShowAIModal(true)}
             className="flex flex-col items-center justify-center gap-4 h-full min-h-[300px] rounded-2xl border-2 border-dashed border-border hover:border-accent hover:bg-white transition-all group"
           >
             <div className="p-4 bg-white group-hover:bg-accent/10 rounded-full transition-colors">
@@ -47,6 +50,20 @@ export const MyTripsScreen: React.FC<MyTripsScreenProps> = ({ trips, onTripClick
           </button>
         </div>
       </Layout>
+      
+      {showAIModal && (
+        <AIChoiceModal 
+          onClose={() => setShowAIModal(false)}
+          onManualClick={() => {
+            setShowAIModal(false);
+            onAddTrip();
+          }}
+          onAIClick={() => {
+            setShowAIModal(false);
+            onAddAITrip();
+          }}
+        />
+      )}
     </div>
   );
 };
