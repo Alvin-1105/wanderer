@@ -403,10 +403,11 @@ export default function App() {
       {currentView !== 'my-trips' && currentView !== 'ai-wizard' && session && (
         <button 
           onClick={() => setCurrentView('ai-wizard')}
-          className="fixed bottom-6 right-6 z-50 p-4 bg-accent hover:bg-accent/90 text-white rounded-full shadow-2xl hover:shadow-accent/40 hover:-translate-y-1 transition-all animate-in fade-in slide-in-from-bottom flex items-center justify-center group"
+          className="fixed bottom-6 right-6 z-[70] px-5 py-4 bg-accent hover:bg-accent/90 text-white rounded-full shadow-2xl hover:shadow-accent/40 hover:-translate-y-1 transition-all flex items-center justify-center gap-2 group border-2 border-white/20"
           title="Ask AI Copilot"
         >
-          <Sparkles className="w-6 h-6 group-hover:scale-110 transition-transform" />
+          <Sparkles className="w-5 h-5 group-hover:scale-110 transition-transform" />
+          <span className="font-semibold text-sm drop-shadow-sm">Ask AI Copilot</span>
         </button>
       )}
     </div>
