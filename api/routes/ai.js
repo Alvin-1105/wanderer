@@ -45,7 +45,7 @@ router.post('/chat', async (req, res) => {
 
     let dynamicPrompt = SYSTEM_PROMPT;
     if (contextTrip) {
-      dynamicPrompt += `\n\nIMPORTANT COPILOT CONTEXT:\nThe user is currently viewing/editing an existing trip. Here is the JSON of their current trip. Base all your advice on this structure:\n${JSON.stringify(contextTrip)}\n\nIMPORTANT RULE 3: If the user asks to modify, add, or change something in this trip, converse with them to confirm the details. ONCE YOU AND THE USER HAVE AGREED ON THE MODIFICATIONS, you MUST output the exact text "[ACTION: UPDATE_TRIP]" at the very END of your final confirmation message.`;
+      dynamicPrompt += `\n\nIMPORTANT COPILOT CONTEXT:\nThe user is currently viewing/editing an existing trip. Here is the JSON of their current trip. Base all your advice on this structure:\n${JSON.stringify(contextTrip)}\n\nIMPORTANT RULE 3: If the user asks to modify, add, or change something in this trip, DO NOT ask them for permission or make them confirm the details. Be extremely decisive. Immediately figure out the best way to do what they asked, explain what you are doing in ONE short sentence, and you MUST output the exact text "[ACTION: UPDATE_TRIP]" at the very END of your message to trigger the backend execution process.`;
     }
 
     const response = await ai.models.generateContent({
