@@ -1,6 +1,7 @@
 import React from 'react';
-import { Plus, Edit3, MapPin, Clock, DollarSign, Activity, Train } from 'lucide-react';
+import { Plus, Edit3, MapPin, Clock, DollarSign, Wallet, Activity, Train } from 'lucide-react';
 import { Destination } from '../types';
+import { calculateDestinationActualBudget } from '../lib/budget';
 import { Layout } from '../components/Layout';
 import { Header } from '../components/Header';
 import { ItineraryItemCard } from '../components/ItineraryItemCard';
@@ -62,8 +63,14 @@ export const CityDetailsScreen: React.FC<CityDetailsScreenProps> = ({
               <span>{destination.duration} Days</span>
             </div>
             <div className="flex items-center gap-2 bg-surface/80 backdrop-blur-md px-3 py-1.5 rounded-full">
+              <span className="text-secondary font-bold uppercase text-[10px] tracking-widest mr-1 opacity-70">Planned</span>
               <DollarSign className="w-4 h-4 text-accent" />
-              <span>Budget: ${destination.budget}</span>
+              <span>{destination.budget}</span>
+            </div>
+            <div className={`flex items-center gap-2 bg-surface/80 backdrop-blur-md px-3 py-1.5 rounded-full ${calculateDestinationActualBudget(destination) > destination.budget ? 'text-red-600 font-bold' : ''}`}>
+              <span className="text-secondary font-bold uppercase text-[10px] tracking-widest mr-1 opacity-70">Actual</span>
+              <Wallet className="w-4 h-4 text-accent" />
+              <span>{calculateDestinationActualBudget(destination)}</span>
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { MapPin, ArrowRight, Edit3, Trash2 } from 'lucide-react';
 import { Destination } from '../types';
+import { calculateDestinationActualBudget } from '../lib/budget';
 
 interface DestinationCardProps {
   destination: Destination;
@@ -51,9 +52,15 @@ export const DestinationCard: React.FC<DestinationCardProps> = ({ destination, o
             <span className="text-[10px] text-secondary uppercase font-bold tracking-widest">Duration</span>
             <span className="text-sm font-medium text-primary">{destination.duration} Days</span>
           </div>
-          <div className="flex flex-col items-end">
-            <span className="text-[10px] text-secondary uppercase font-bold tracking-widest">Budget</span>
-            <span className="text-sm font-medium text-primary">${destination.budget}</span>
+          <div className="flex gap-4">
+            <div className="flex flex-col items-end">
+              <span className="text-[10px] text-secondary uppercase font-bold tracking-widest">Planned</span>
+              <span className="text-sm font-medium text-primary">${destination.budget}</span>
+            </div>
+            <div className="flex flex-col items-end">
+              <span className="text-[10px] text-secondary uppercase font-bold tracking-widest">Actual</span>
+              <span className={`text-sm font-bold ${calculateDestinationActualBudget(destination) > destination.budget ? 'text-red-500' : 'text-green-600'}`}>${calculateDestinationActualBudget(destination)}</span>
+            </div>
           </div>
         </div>
       </div>

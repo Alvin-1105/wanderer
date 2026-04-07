@@ -1,6 +1,7 @@
 import React from 'react';
 import { Calendar, MapPin, Clock, Trash2 } from 'lucide-react';
 import { Trip, TripStatus } from '../types';
+import { calculateTripActualBudget } from '../lib/budget';
 import { cn } from '../lib/utils';
 
 interface TripCardProps {
@@ -49,7 +50,7 @@ export const TripCard: React.FC<TripCardProps> = ({ trip, onClick, onDelete }) =
           {trip.description}
         </p>
         
-        <div className="flex items-center gap-4 mt-2 text-xs text-secondary font-medium">
+        <div className="flex items-center gap-4 mt-2 text-xs text-secondary font-medium flex-wrap">
           <div className="flex items-center gap-1.5">
             <Calendar className="w-3.5 h-3.5" />
             <span>{new Date(trip.startDate + 'T12:00:00').toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}</span>
@@ -58,9 +59,19 @@ export const TripCard: React.FC<TripCardProps> = ({ trip, onClick, onDelete }) =
             <Clock className="w-3.5 h-3.5" />
             <span>{trip.duration} Days</span>
           </div>
-          <div className="flex items-center gap-1.5">
-            <MapPin className="w-3.5 h-3.5" />
-            <span>{trip.destinations.length} Cities</span>
+          <div className="flex items-center gap-1.5 w-full pt-2 border-t border-border/50">
+            <div className="flex items-center gap-2 w-full justify-between">
+              <div className="flex items-baseline gap-1">
+                <span className="opacity-70 uppercase tracking-widest text-[10px]">Planned:</span>
+                <span className="font-semibold text-primary">${trip.budget}</span>
+              </div>
+              <div className="flex items-baseline gap-1">
+                <span className="opacity-70 uppercase tracking-widest text-[10px]">Actual:</span>
+                <span className={`font-bold ${calculateTripActualBudget(trip) > trip.budget ? 'text-red-500' : 'text-green-600'}`}>
+                  ${calculateTripActualBudget(trip)}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

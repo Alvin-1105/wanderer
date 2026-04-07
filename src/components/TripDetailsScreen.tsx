@@ -1,6 +1,7 @@
 import React from 'react';
-import { Plus, Edit3, Calendar, MapPin, Clock, DollarSign } from 'lucide-react';
+import { Plus, Edit3, Calendar, MapPin, Clock, DollarSign, Wallet } from 'lucide-react';
 import { Trip } from '../types';
+import { calculateTripActualBudget } from '../lib/budget';
 import { Layout } from '../components/Layout';
 import { Header } from '../components/Header';
 import { DestinationCard } from '../components/DestinationCard';
@@ -66,8 +67,14 @@ export const TripDetailsScreen: React.FC<TripDetailsScreenProps> = ({
               <span>{trip.duration} Days</span>
             </div>
             <div className="flex items-center gap-2 bg-surface/80 backdrop-blur-md px-3 py-1.5 rounded-full">
+              <span className="text-secondary font-bold uppercase text-[10px] tracking-widest mr-1 opacity-70">Planned</span>
               <DollarSign className="w-4 h-4 text-accent" />
-              <span>Budget: ${trip.budget}</span>
+              <span>{trip.budget}</span>
+            </div>
+            <div className={`flex items-center gap-2 bg-surface/80 backdrop-blur-md px-3 py-1.5 rounded-full ${calculateTripActualBudget(trip) > trip.budget ? 'text-red-600 font-bold' : ''}`}>
+              <span className="text-secondary font-bold uppercase text-[10px] tracking-widest mr-1 opacity-70">Actual</span>
+              <Wallet className="w-4 h-4 text-accent" />
+              <span>{calculateTripActualBudget(trip)}</span>
             </div>
           </div>
         </div>

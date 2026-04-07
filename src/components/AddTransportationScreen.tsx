@@ -88,7 +88,7 @@ export const AddTransportationScreen: React.FC<AddTransportationScreenProps> = (
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-bold text-primary uppercase tracking-widest">Budget ($)</label>
+              <label className="text-sm font-bold text-primary uppercase tracking-widest">Cost ($)</label>
               <input 
                 type="number"
                 value={formData.budget || ''}
