@@ -20,14 +20,28 @@ IMPORTANT RULE 1: Do NOT ask all questions at once. Ask one or two questions at 
 IMPORTANT RULE 2: Once you have gathered enough information to generate a complete and personalized trip, you MUST output the exact text "[ACTION: GENERATE_TRIP]" at the very END of your final confirmation message. Do not include this phrase until you are ready to stop chatting and build the trip.
 `;
 
+// Gemini API strictly requires history to begin with 'user' and alternate.
+function sanitizeMessages(messages) {
+  let cleaned = [];
+  for (let m of messages) {
+    const role = m.role === 'ai' ? 'model' : 'user';
+    if (cleaned.length === 0 && role !== 'user') continue; 
+    
+    if (cleaned.length > 0 && cleaned[cleaned.length - 1].role === role) {
+      cleaned[cleaned.length - 1].parts[0].text += '\n\n' + m.content;
+      continue;
+    }
+    
+    cleaned.push({ role, parts: [{ text: m.content }] });
+  }
+  return cleaned;
+}
+
 router.post('/chat', async (req, res) => {
   try {
     const { messages, contextTrip } = req.body;
     
-    const formattedMessages = messages.map(m => ({
-      role: m.role === 'ai' ? 'model' : 'user',
-      parts: [{ text: m.content }]
-    }));
+    const formattedMessages = sanitizeMessages(messages);
 
     let dynamicPrompt = SYSTEM_PROMPT;
     if (contextTrip) {
@@ -92,10 +106,7 @@ You MUST return ONLY valid JSON matching this exact structure:
 DO NOT wrap the JSON in Markdown code blocks like \`\`\`json. Just return the raw JSON object. Use realistic verifiable places. DO NOT leave trailing commas or comments in the JSON.
 `;
 
-    const formattedMessages = messages.map(m => ({
-      role: m.role === 'ai' ? 'model' : 'user',
-      parts: [{ text: m.content }]
-    }));
+    const formattedMessages = sanitizeMessages(messages);
     formattedMessages.push({ role: 'user', parts: [{ text: jsonPrompt }] });
 
     const response = await ai.models.generateContent({
@@ -230,10 +241,7 @@ You MUST return ONLY valid JSON matching this exact structure:
 DO NOT wrap the JSON in Markdown code blocks like \`\`\`json. Just return the raw JSON object.
 `;
 
-    const formattedMessages = messages.map(m => ({
-      role: m.role === 'ai' ? 'model' : 'user',
-      parts: [{ text: m.content }]
-    }));
+    const formattedMessages = sanitizeMessages(messages);
     formattedMessages.push({ role: 'user', parts: [{ text: jsonPrompt }] });
 
     const response = await ai.models.generateContent({
