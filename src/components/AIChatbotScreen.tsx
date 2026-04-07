@@ -8,17 +8,22 @@ interface Message {
   content: string;
 }
 
+import { Trip } from '../types';
+
 interface AIChatbotScreenProps {
   onBack: () => void;
   onTripGenerated: (tripId: string) => void;
+  contextTrip?: Trip;
 }
 
-export const AIChatbotScreen: React.FC<AIChatbotScreenProps> = ({ onBack, onTripGenerated }) => {
+export const AIChatbotScreen: React.FC<AIChatbotScreenProps> = ({ onBack, onTripGenerated, contextTrip }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'initial',
       role: 'ai',
-      content: "Hello! I'm your professional AI travel assistant. Where are you dreaming of going, and what kind of experience are you looking for?"
+      content: contextTrip 
+        ? `Hello! I'm your Copilot for your trip to ${contextTrip.title}. I can read your entire itinerary. Tell me what you'd like to add, change, or improve! (e.g. "Add a coffee shop to day 2 in Paris")`
+        : "Hello! I'm your professional AI travel assistant. Where are you dreaming of going, and what kind of experience are you looking for?"
     }
   ]);
   const [input, setInput] = useState('');
@@ -48,7 +53,7 @@ export const AIChatbotScreen: React.FC<AIChatbotScreenProps> = ({ onBack, onTrip
       // Filter out local error/system messages so we don't poison the LLM history
       const apiMessages = newMessages.filter(m => !m.id.endsWith('err') && !m.id.endsWith('sys'));
       
-      const response = await api.chatWithAI(apiMessages);
+      const response = await api.chatWithAI(apiMessages, contextTrip);
       
       const aiContent = response.message;
       const isReadyToGenerate = aiContent.includes('[ACTION: GENERATE_TRIP]');
@@ -59,6 +64,8 @@ export const AIChatbotScreen: React.FC<AIChatbotScreenProps> = ({ onBack, onTrip
       if (cleanContent) {
         setMessages(prev => [...prev, { id: Date.now().toString() + 'ai', role: 'ai', content: cleanContent }]);
       }
+
+      const isReadyToModify = aiContent.includes('[ACTION: UPDATE_TRIP]');
 
       if (isReadyToGenerate) {
         setIsGeneratingTrip(true);
@@ -71,6 +78,21 @@ export const AIChatbotScreen: React.FC<AIChatbotScreenProps> = ({ onBack, onTrip
             id: Date.now().toString() + 'sys', 
             role: 'ai', 
             content: "I'm sorry, I ran into an error while building the trip database. Please try answering the last question again." 
+          }]);
+          setIsGeneratingTrip(false);
+        }
+      } else if (isReadyToModify && contextTrip) {
+        setIsGeneratingTrip(true);
+        try {
+          // The AI generated an update command!
+          await api.updateTripViaAI(apiMessages, contextTrip.id);
+          onTripGenerated(contextTrip.id); // Reload
+        } catch (updateError) {
+          console.error("Trip Update Error:", updateError);
+          setMessages(prev => [...prev, { 
+            id: Date.now().toString() + 'sys', 
+            role: 'ai', 
+            content: "I'm sorry, I ran into an error while modifying your trip database." 
           }]);
           setIsGeneratingTrip(false);
         }
@@ -111,8 +133,8 @@ export const AIChatbotScreen: React.FC<AIChatbotScreenProps> = ({ onBack, onTrip
           <Sparkles className="w-5 h-5 text-accent" />
         </div>
         <div>
-          <h1 className="font-display font-bold text-lg text-primary">Travel Assistant</h1>
-          <p className="text-xs text-secondary">Expert Trip Planner</p>
+          <h1 className="font-display font-bold text-lg text-primary">{contextTrip ? 'Trip Copilot' : 'Travel Assistant'}</h1>
+          <p className="text-xs text-secondary">{contextTrip ? `Editing ${contextTrip.title}` : 'Expert Trip Planner'}</p>
         </div>
         <div className="flex-1" />
         <button 

@@ -3,7 +3,7 @@ import * as api from './api';
 import { supabase } from './lib/supabaseClient';
 import { AuthScreen } from './components/AuthScreen';
 import { Session } from '@supabase/supabase-js';
-import { LogOut } from 'lucide-react';
+import { LogOut, Sparkles } from 'lucide-react';
 import { Trip, Destination, Activity, Transportation, TripStatus } from './types';
 import { MyTripsScreen } from './components/MyTripsScreen';
 import { TripDetailsScreen } from './components/TripDetailsScreen';
@@ -389,7 +389,8 @@ export default function App() {
         {currentView === 'ai-wizard' && (
           <AIChatbotScreen
             key="ai-wizard"
-            onBack={() => setCurrentView('my-trips')}
+            contextTrip={selectedTrip}
+            onBack={() => selectedTripId ? setCurrentView('trip-details') : setCurrentView('my-trips')}
             onTripGenerated={(tripId) => {
               loadTrips();
               navigateToTripDetails(tripId);
@@ -397,6 +398,17 @@ export default function App() {
           />
         )}
       </AnimatePresence>
+      
+      {/* Floating AI Copilot Button */}
+      {currentView !== 'my-trips' && currentView !== 'ai-wizard' && session && (
+        <button 
+          onClick={() => setCurrentView('ai-wizard')}
+          className="fixed bottom-6 right-6 z-50 p-4 bg-accent hover:bg-accent/90 text-white rounded-full shadow-2xl hover:shadow-accent/40 hover:-translate-y-1 transition-all animate-in fade-in slide-in-from-bottom flex items-center justify-center group"
+          title="Ask AI Copilot"
+        >
+          <Sparkles className="w-6 h-6 group-hover:scale-110 transition-transform" />
+        </button>
+      )}
     </div>
   );
 }

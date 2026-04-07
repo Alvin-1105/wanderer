@@ -138,11 +138,11 @@ export const deleteTransportationBetween = async (id: string): Promise<void> => 
   });
   if (!res.ok) throw new Error('Failed to delete transportation between');
 };
-export const chatWithAI = async (messages: { role: string, content: string }[]): Promise<{ message: string }> => {
+export const chatWithAI = async (messages: { role: string, content: string }[], contextTrip?: Trip): Promise<{ message: string }> => {
   const res = await fetch(`${API_BASE}/ai/chat`, {
     method: 'POST',
     headers: await getAuthHeaders(),
-    body: JSON.stringify({ messages }),
+    body: JSON.stringify({ messages, contextTrip }),
   });
   if (!res.ok) throw new Error('Failed to chat with AI');
   return res.json();
@@ -155,5 +155,15 @@ export const generateAITrip = async (messages: { role: string, content: string }
     body: JSON.stringify({ messages }),
   });
   if (!res.ok) throw new Error('Failed to generate AI trip');
+  return transformKeys(await res.json());
+};
+
+export const updateTripViaAI = async (messages: { role: string, content: string }[], tripId: string): Promise<Trip> => {
+  const res = await fetch(`${API_BASE}/ai/update_trip`, {
+    method: 'POST',
+    headers: await getAuthHeaders(),
+    body: JSON.stringify({ messages, tripId }),
+  });
+  if (!res.ok) throw new Error('Failed to modify AI trip');
   return transformKeys(await res.json());
 };
