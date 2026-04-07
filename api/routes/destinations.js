@@ -27,6 +27,13 @@ router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const updates = { ...req.body };
+    delete updates.id;
+    delete updates.created_at;
+    delete updates.updated_at;
+    delete updates.user_id;
+    delete updates.trip_id;
+    delete updates.items;
+
     if (updates.coverImage !== undefined) { updates.cover_image = updates.coverImage; delete updates.coverImage; }
 
     const { data, error } = await req.supabase

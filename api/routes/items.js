@@ -27,6 +27,12 @@ router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const updates = { ...req.body };
+    delete updates.id;
+    delete updates.created_at;
+    delete updates.updated_at;
+    delete updates.user_id;
+    delete updates.destination_id;
+    
     if (updates.durationUnit !== undefined) { updates.duration_unit = updates.durationUnit; delete updates.durationUnit; }
 
     const { data, error } = await req.supabase

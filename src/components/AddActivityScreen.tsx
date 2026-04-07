@@ -106,7 +106,7 @@ export const AddActivityScreen: React.FC<AddActivityScreenProps> = ({ activity, 
           <div className="flex flex-col gap-2">
             <label className="text-sm font-bold text-primary uppercase tracking-widest">Image URL</label>
             <input 
-              type="url"
+              type="text"
               value={formData.image}
               onChange={(e) => setFormData({ ...formData, image: e.target.value })}
               className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all text-sm"
@@ -114,6 +114,7 @@ export const AddActivityScreen: React.FC<AddActivityScreenProps> = ({ activity, 
             {formData.image && (
               <div className="mt-2 h-40 w-full rounded-xl overflow-hidden border border-border">
                 <img 
+                  key={formData.image}
                   src={formData.image} 
                   alt="Preview" 
                   referrerPolicy="no-referrer"

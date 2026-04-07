@@ -70,6 +70,13 @@ router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const updates = { ...req.body };
+    delete updates.id;
+    delete updates.created_at;
+    delete updates.updated_at;
+    delete updates.user_id;
+    delete updates.destinations;
+    delete updates.transportationBetweenDestinations;
+    
     if (updates.coverImage !== undefined) { updates.cover_image = updates.coverImage; delete updates.coverImage; }
     if (updates.startDate !== undefined) { updates.start_date = updates.startDate; delete updates.startDate; }
     if (updates.endDate !== undefined) { updates.end_date = updates.endDate; delete updates.endDate; }

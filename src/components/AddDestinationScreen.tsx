@@ -81,7 +81,7 @@ export const AddDestinationScreen: React.FC<AddDestinationScreenProps> = ({ dest
           <div className="flex flex-col gap-2">
             <label className="text-sm font-bold text-primary uppercase tracking-widest">Cover Image URL</label>
             <input 
-              type="url"
+              type="text"
               value={formData.coverImage}
               onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
               className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all text-sm"
@@ -89,6 +89,7 @@ export const AddDestinationScreen: React.FC<AddDestinationScreenProps> = ({ dest
             {formData.coverImage && (
               <div className="mt-2 h-40 w-full rounded-xl overflow-hidden border border-border">
                 <img 
+                  key={formData.coverImage}
                   src={formData.coverImage} 
                   alt="Preview" 
                   referrerPolicy="no-referrer"
