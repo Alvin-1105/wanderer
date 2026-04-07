@@ -31,8 +31,9 @@ router.get('/', async (req, res) => {
           transpObj[`${t.from_destination_id}-${t.to_destination_id}`] = t;
         });
       }
+      const { transportations_between_destinations, ...tripWithoutTransp } = trip;
       return {
-        ...trip,
+        ...tripWithoutTransp,
         transportationBetweenDestinations: transpObj
       }
     });
@@ -79,6 +80,7 @@ router.put('/:id', async (req, res) => {
     delete updates.userId;
     delete updates.destinations;
     delete updates.transportationBetweenDestinations;
+    delete updates.transportationsBetweenDestinations;
     
     if (updates.coverImage !== undefined) { updates.cover_image = updates.coverImage; delete updates.coverImage; }
     if (updates.startDate !== undefined) { updates.start_date = updates.startDate; delete updates.startDate; }
