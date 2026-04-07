@@ -22,6 +22,10 @@
   --color-on-surface-variant: #424753;
   --color-outline: #727785;
   --color-outline-variant: #c2c6d5;
+  
+  --color-border: #e6e8ea;
+  --color-accent: #005cc8;
+  --color-accent-foreground: #ffffff;
 
   --radius-xl: 1.5rem;
   --radius-2xl: 2rem;
