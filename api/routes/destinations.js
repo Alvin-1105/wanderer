@@ -37,6 +37,10 @@ router.put('/:id', async (req, res) => {
     delete updates.trip_id;
     delete updates.tripId;
     delete updates.items;
+    delete updates.transportationsFrom;
+    delete updates.transportationsTo;
+    delete updates.transportations_between_from;
+    delete updates.transportations_between_to;
 
     if (updates.coverImage !== undefined) { updates.cover_image = updates.coverImage; delete updates.coverImage; }
 

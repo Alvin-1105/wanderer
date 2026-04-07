@@ -38,6 +38,7 @@ router.put('/:id', async (req, res) => {
     delete updates.destinationId;
     
     if (updates.durationUnit !== undefined) { updates.duration_unit = updates.durationUnit; delete updates.durationUnit; }
+    if (updates.orderIndex !== undefined) { updates.order_index = updates.orderIndex; delete updates.orderIndex; }
 
     const { data, error } = await req.supabase
       .from('items')
