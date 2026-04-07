@@ -57,7 +57,7 @@ You MUST return ONLY valid JSON matching this exact structure:
 {
   "title": "A catchy title for the trip",
   "description": "A rich, enthusiastic overview of the entire trip, explaining WHY it matches the user's motivation, cultural distance, and budget.",
-  "coverImage": "A realistic Unsplash or high quality image URL related to the main destination. Example: https://images.unsplash.com/photo-1499856871958-5b9627545d1a",
+  "coverImage": "MUST be exactly: https://image.pollinations.ai/prompt/{highly_detailed_scenic_description_of_the_overall_trip_destination_keyword_escaped}?width=1200&height=800&nologo=true",
   "startDate": "YYYY-MM-DD",
   "endDate": "YYYY-MM-DD",
   "budget": number (total planned budget),
@@ -66,14 +66,14 @@ You MUST return ONLY valid JSON matching this exact structure:
       "city": "City name",
       "country": "Country name",
       "description": "Why this city is chosen",
-      "coverImage": "Image URL",
+      "coverImage": "MUST be exactly: https://image.pollinations.ai/prompt/{highly_detailed_description_of_this_city_landmark_escaped}?width=1000&height=600&nologo=true",
       "budget": number,
       "items": [
         {
           "type": "activity",
           "title": "Activity name",
           "description": "Engaging description",
-          "image": "Image URL (optional)",
+          "image": "MUST be exactly: https://image.pollinations.ai/prompt/{highly_detailed_description_of_this_specific_activity_escaped}?width=800&height=500&nologo=true",
           "budget": number,
           "duration": number,
           "durationUnit": "Hours",
