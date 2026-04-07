@@ -145,22 +145,25 @@ export const AIChatbotScreen: React.FC<AIChatbotScreenProps> = ({ onBack, onTrip
 
       {/* Input Area */}
       <div className="bg-white p-4 border-t border-border shrink-0">
-        <div className="max-w-4xl mx-auto flex gap-3 relative">
-          <input 
-            type="text"
+        <div className="max-w-4xl mx-auto relative">
+          <textarea 
+            rows={3}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') handleSend();
+              if (e.key === 'Enter' && !e.shiftKey) { 
+                e.preventDefault(); 
+                handleSend(); 
+              }
             }}
-            placeholder="Type your reply here..."
-            className="flex-grow bg-surface border border-border rounded-full px-6 py-4 outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all pl-6 pr-14"
+            placeholder="Type your reply here... (Shift+Enter for a new line)"
+            className="w-full bg-surface border border-border rounded-2xl px-6 py-4 outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all pr-16 resize-none text-base"
             disabled={isLoading || isGeneratingTrip}
           />
           <button 
             onClick={handleSend}
             disabled={!input.trim() || isLoading || isGeneratingTrip}
-            className="absolute right-2 top-2 p-2.5 bg-accent hover:bg-accent/90 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-full transition-colors"
+            className="absolute right-3 bottom-3 p-3 bg-accent hover:bg-accent/90 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-xl transition-colors shadow-sm"
           >
             <Send className="w-5 h-5" />
           </button>
