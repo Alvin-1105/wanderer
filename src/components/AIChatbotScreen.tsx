@@ -175,7 +175,7 @@ export const AIChatbotScreen: React.FC<AIChatbotScreenProps> = ({ onBack, onTrip
   }
 
   return (
-    <div className="fixed inset-0 bg-surface flex flex-col z-40">
+    <div className="fixed inset-0 bg-surface flex flex-col z-[60]">
       {/* Header */}
       <div className="bg-white px-4 py-4 flex items-center border-b border-border shadow-sm shrink-0">
         <button 
