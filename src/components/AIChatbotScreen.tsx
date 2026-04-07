@@ -45,7 +45,10 @@ export const AIChatbotScreen: React.FC<AIChatbotScreenProps> = ({ onBack, onTrip
     setIsLoading(true);
 
     try {
-      const response = await api.chatWithAI(newMessages);
+      // Filter out local error/system messages so we don't poison the LLM history
+      const apiMessages = newMessages.filter(m => !m.id.endsWith('err') && !m.id.endsWith('sys'));
+      
+      const response = await api.chatWithAI(apiMessages);
       
       const aiContent = response.message;
       const isReadyToGenerate = aiContent.includes('[ACTION: GENERATE_TRIP]');
@@ -60,7 +63,7 @@ export const AIChatbotScreen: React.FC<AIChatbotScreenProps> = ({ onBack, onTrip
       if (isReadyToGenerate) {
         setIsGeneratingTrip(true);
         try {
-          const generatedTrip = await api.generateAITrip(newMessages);
+          const generatedTrip = await api.generateAITrip(apiMessages);
           onTripGenerated(generatedTrip.id);
         } catch (genError) {
           console.error("Trip Generation Error:", genError);
