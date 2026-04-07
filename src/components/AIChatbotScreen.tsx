@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, ArrowLeft, Sparkles, User, Loader2 } from 'lucide-react';
+import { Send, ArrowLeft, Sparkles, User, Loader2, X } from 'lucide-react';
 import * as api from '../api';
 
 interface Message {
@@ -114,6 +114,14 @@ export const AIChatbotScreen: React.FC<AIChatbotScreenProps> = ({ onBack, onTrip
           <h1 className="font-display font-bold text-lg text-primary">Travel Assistant</h1>
           <p className="text-xs text-secondary">Expert Trip Planner</p>
         </div>
+        <div className="flex-1" />
+        <button 
+          onClick={onBack}
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-surface hover:bg-red-50 text-secondary hover:text-red-500 rounded-lg transition-colors border border-border text-sm font-medium"
+        >
+          <X className="w-4 h-4" />
+          <span>Exit</span>
+        </button>
       </div>
 
       {/* Chat Area */}
