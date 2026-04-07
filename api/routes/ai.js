@@ -57,7 +57,7 @@ You MUST return ONLY valid JSON matching this exact structure:
 {
   "title": "A catchy title for the trip",
   "description": "A rich, enthusiastic overview of the entire trip, explaining WHY it matches the user's motivation, cultural distance, and budget.",
-  "coverImage": "MUST be exactly: https://loremflickr.com/1200/800/{keyword1},{keyword2}/all (replace keywords with 2-3 single-word tags representing the destination, separated by commas, NO SPACES OR UNDERSCORES)",
+  "coverImage": "MUST be exactly: https://tse1.mm.bing.net/th?q={keyword1}+{keyword2}&w=1200&h=800&c=7 (replace keywords with 2-3 words representing the destination, e.g. Eiffel+Tower+Paris, use + instead of spaces)",
   "startDate": "YYYY-MM-DD",
   "endDate": "YYYY-MM-DD",
   "budget": number (total planned budget),
@@ -66,7 +66,7 @@ You MUST return ONLY valid JSON matching this exact structure:
       "city": "City name",
       "country": "Country name",
       "description": "Why this city is chosen",
-      "coverImage": "MUST be exactly: https://loremflickr.com/1000/600/{city_name},{landmark}/all (single words only, separated by commas, NO SPACES)",
+      "coverImage": "MUST be exactly: https://tse1.mm.bing.net/th?q={landmark}+in+{city_name}&w=1000&h=600&c=7 (e.g. Louvre+in+Paris, use + instead of spaces)",
       "budget": number,
       "duration": number (number of days to stay here),
       "items": [
@@ -74,7 +74,7 @@ You MUST return ONLY valid JSON matching this exact structure:
           "type": "activity",
           "title": "Activity name",
           "description": "Engaging description",
-          "image": "MUST be exactly: https://loremflickr.com/800/500/{activity_theme},{city}/all (single words only, separated by commas, NO SPACES)",
+          "image": "MUST be exactly: https://tse1.mm.bing.net/th?q={specific_activity}+in+{city}&w=800&h=500&c=7 (e.g. Coffee+shop+in+Paris, use + instead of spaces)",
           "budget": number,
           "duration": number,
           "durationUnit": "Hours",
