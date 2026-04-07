@@ -113,10 +113,11 @@ export const AIChatbotScreen: React.FC<AIChatbotScreenProps> = ({ onBack, onTrip
           onTripGenerated(generatedTrip.id);
         } catch (genError) {
           console.error("Trip Generation Error:", genError);
+          const isRateLimit = genError instanceof Error && genError.message.includes('RATE_LIMIT');
           setMessages(prev => [...prev, { 
             id: Date.now().toString() + 'sys', 
             role: 'ai', 
-            content: "I'm sorry, I ran into an error while building the trip database. Please try answering the last question again." 
+            content: isRateLimit ? "Whoa, slow down! We've hit Google's free tier speed limit. Please wait 15 seconds before trying again." : "I'm sorry, I ran into an error while building the trip database. Please try answering the last question again." 
           }]);
           setIsGeneratingTrip(false);
         }
@@ -128,10 +129,11 @@ export const AIChatbotScreen: React.FC<AIChatbotScreenProps> = ({ onBack, onTrip
           onTripGenerated(contextTrip.id); // Reload
         } catch (updateError) {
           console.error("Trip Update Error:", updateError);
+          const isRateLimit = updateError instanceof Error && updateError.message.includes('RATE_LIMIT');
           setMessages(prev => [...prev, { 
             id: Date.now().toString() + 'sys', 
             role: 'ai', 
-            content: "I'm sorry, I ran into an error while modifying your trip database." 
+            content: isRateLimit ? "Whoa, slow down! We've hit Google's free tier speed limit. Please wait 15 seconds before trying again." : "I'm sorry, I ran into an error while modifying your trip database." 
           }]);
           setIsGeneratingTrip(false);
         }
@@ -140,7 +142,12 @@ export const AIChatbotScreen: React.FC<AIChatbotScreenProps> = ({ onBack, onTrip
       }
     } catch (error) {
       console.error(error);
-      setMessages(prev => [...prev, { id: Date.now().toString() + 'err', role: 'ai', content: 'Oops! I had trouble connecting to my database. Could you try sending that again?' }]);
+      const isRateLimit = error instanceof Error && error.message.includes('RATE_LIMIT');
+      setMessages(prev => [...prev, { 
+        id: Date.now().toString() + 'err', 
+        role: 'ai', 
+        content: isRateLimit ? "Whoa, slow down! We've hit Google's AI speed limit. Please wait about 15 seconds before sending another message." : 'Oops! I had trouble connecting to the AI database. Could you try sending that again?' 
+      }]);
       setIsLoading(false);
     }
   };

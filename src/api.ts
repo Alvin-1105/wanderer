@@ -144,6 +144,7 @@ export const chatWithAI = async (messages: { role: string, content: string }[], 
     headers: await getAuthHeaders(),
     body: JSON.stringify({ messages, contextTrip }),
   });
+  if (res.status === 429) throw new Error('RATE_LIMIT');
   if (!res.ok) throw new Error('Failed to chat with AI');
   return res.json();
 };
@@ -154,6 +155,7 @@ export const generateAITrip = async (messages: { role: string, content: string }
     headers: await getAuthHeaders(),
     body: JSON.stringify({ messages }),
   });
+  if (res.status === 429) throw new Error('RATE_LIMIT');
   if (!res.ok) throw new Error('Failed to generate AI trip');
   return transformKeys(await res.json());
 };
@@ -164,6 +166,7 @@ export const updateTripViaAI = async (messages: { role: string, content: string 
     headers: await getAuthHeaders(),
     body: JSON.stringify({ messages, tripId }),
   });
+  if (res.status === 429) throw new Error('RATE_LIMIT');
   if (!res.ok) throw new Error('Failed to modify AI trip');
   return transformKeys(await res.json());
 };

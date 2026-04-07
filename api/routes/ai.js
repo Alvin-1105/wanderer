@@ -60,7 +60,11 @@ router.post('/chat', async (req, res) => {
     res.json({ message: response.text });
   } catch (error) {
     console.error('Chat error:', error);
-    res.status(500).json({ error: 'Failed to communicate with AI' });
+    if (error.status === 429 || (error.message && error.message.includes('429'))) {
+      res.status(429).json({ error: 'Rate limit exceeded' });
+    } else {
+      res.status(500).json({ error: 'Failed to communicate with AI' });
+    }
   }
 });
 
@@ -195,7 +199,11 @@ DO NOT wrap the JSON in Markdown code blocks like \`\`\`json. Just return the ra
     res.json(tripDoc);
   } catch (error) {
     console.error('Generation error:', error);
-    res.status(500).json({ error: 'Failed to generate trip' });
+    if (error.status === 429 || (error.message && error.message.includes('429'))) {
+      res.status(429).json({ error: 'Rate limit exceeded' });
+    } else {
+      res.status(500).json({ error: 'Failed to generate trip' });
+    }
   }
 });
 
@@ -340,7 +348,11 @@ DO NOT wrap the JSON in Markdown code blocks like \`\`\`json. Just return the ra
     res.json(tripDoc);
   } catch (error) {
     console.error('Update via AI error:', error);
-    res.status(500).json({ error: 'Failed to update trip via AI' });
+    if (error.status === 429 || (error.message && error.message.includes('429'))) {
+      res.status(429).json({ error: 'Rate limit exceeded' });
+    } else {
+      res.status(500).json({ error: 'Failed to update trip via AI' });
+    }
   }
 });
 
