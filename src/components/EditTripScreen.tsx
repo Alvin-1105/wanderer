@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Trip, TripStatus } from '../types';
 import { Layout } from '../components/Layout';
 import { Header } from '../components/Header';
@@ -22,6 +22,19 @@ export const EditTripScreen: React.FC<EditTripScreenProps> = ({ trip, onBack, on
     duration: 0,
     destinations: []
   });
+
+  useEffect(() => {
+    if (formData.startDate && formData.endDate) {
+      const start = new Date(formData.startDate);
+      const end = new Date(formData.endDate);
+      const diffTime = end.getTime() - start.getTime();
+      const diffDays = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1);
+      
+      if (formData.duration !== diffDays) {
+        setFormData(prev => ({ ...prev, duration: diffDays }));
+      }
+    }
+  }, [formData.startDate, formData.endDate]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

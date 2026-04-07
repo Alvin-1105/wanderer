@@ -29,9 +29,13 @@ router.put('/:id', async (req, res) => {
     const updates = { ...req.body };
     delete updates.id;
     delete updates.created_at;
+    delete updates.createdAt;
     delete updates.updated_at;
+    delete updates.updatedAt;
     delete updates.user_id;
+    delete updates.userId;
     delete updates.trip_id;
+    delete updates.tripId;
     delete updates.items;
 
     if (updates.coverImage !== undefined) { updates.cover_image = updates.coverImage; delete updates.coverImage; }

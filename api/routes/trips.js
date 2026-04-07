@@ -72,8 +72,11 @@ router.put('/:id', async (req, res) => {
     const updates = { ...req.body };
     delete updates.id;
     delete updates.created_at;
+    delete updates.createdAt;
     delete updates.updated_at;
+    delete updates.updatedAt;
     delete updates.user_id;
+    delete updates.userId;
     delete updates.destinations;
     delete updates.transportationBetweenDestinations;
     
