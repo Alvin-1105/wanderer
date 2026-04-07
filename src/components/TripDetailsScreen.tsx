@@ -59,7 +59,7 @@ export const TripDetailsScreen: React.FC<TripDetailsScreenProps> = ({
           <div className="flex items-center gap-6 text-sm font-medium text-primary">
             <div className="flex items-center gap-2 bg-surface/80 backdrop-blur-md px-3 py-1.5 rounded-full">
               <Calendar className="w-4 h-4 text-accent" />
-              <span>{new Date(trip.startDate || '').toLocaleDateString()} - {new Date(trip.endDate || '').toLocaleDateString()}</span>
+              <span>{new Date(trip.startDate ? trip.startDate + 'T12:00:00' : '').toLocaleDateString()} - {new Date(trip.endDate ? trip.endDate + 'T12:00:00' : '').toLocaleDateString()}</span>
             </div>
             <div className="flex items-center gap-2 bg-surface/80 backdrop-blur-md px-3 py-1.5 rounded-full">
               <Clock className="w-4 h-4 text-accent" />

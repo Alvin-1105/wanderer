@@ -52,7 +52,7 @@ export const TripCard: React.FC<TripCardProps> = ({ trip, onClick, onDelete }) =
         <div className="flex items-center gap-4 mt-2 text-xs text-secondary font-medium">
           <div className="flex items-center gap-1.5">
             <Calendar className="w-3.5 h-3.5" />
-            <span>{new Date(trip.startDate).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}</span>
+            <span>{new Date(trip.startDate + 'T12:00:00').toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <Clock className="w-3.5 h-3.5" />
