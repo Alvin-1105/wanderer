@@ -12,6 +12,7 @@ import { EditTripScreen } from './components/EditTripScreen';
 import { AddDestinationScreen } from './components/AddDestinationScreen';
 import { AddActivityScreen } from './components/AddActivityScreen';
 import { AddTransportationScreen } from './components/AddTransportationScreen';
+import { AIChatbotScreen } from './components/AIChatbotScreen';
 import { AnimatePresence } from 'motion/react';
 
 type View = 
@@ -386,16 +387,14 @@ export default function App() {
           />
         )}
         {currentView === 'ai-wizard' && (
-          <div className="min-h-screen bg-surface flex flex-col items-center justify-center p-8">
-            <h1 className="text-3xl font-bold mb-4 font-display">AI Trip Wizard</h1>
-            <p className="text-secondary mb-8">This feature is under development (Step 2).</p>
-            <button 
-              onClick={() => setCurrentView('my-trips')}
-              className="px-6 py-3 bg-accent text-white rounded-full font-semibold"
-            >
-              Go Back
-            </button>
-          </div>
+          <AIChatbotScreen
+            key="ai-wizard"
+            onBack={() => setCurrentView('my-trips')}
+            onTripGenerated={(tripId) => {
+              loadTrips();
+              navigateToTripDetails(tripId);
+            }}
+          />
         )}
       </AnimatePresence>
     </div>

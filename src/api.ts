@@ -138,3 +138,22 @@ export const deleteTransportationBetween = async (id: string): Promise<void> => 
   });
   if (!res.ok) throw new Error('Failed to delete transportation between');
 };
+export const chatWithAI = async (messages: { role: string, content: string }[]): Promise<{ message: string }> => {
+  const res = await fetch(`${API_BASE}/ai/chat`, {
+    method: 'POST',
+    headers: await getAuthHeaders(),
+    body: JSON.stringify({ messages }),
+  });
+  if (!res.ok) throw new Error('Failed to chat with AI');
+  return res.json();
+};
+
+export const generateAITrip = async (messages: { role: string, content: string }[]): Promise<Trip> => {
+  const res = await fetch(`${API_BASE}/ai/generate`, {
+    method: 'POST',
+    headers: await getAuthHeaders(),
+    body: JSON.stringify({ messages }),
+  });
+  if (!res.ok) throw new Error('Failed to generate AI trip');
+  return transformKeys(await res.json());
+};

@@ -5,6 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 import tripsRouter from './routes/trips.js';
 import destinationsRouter from './routes/destinations.js';
 import itemsRouter from './routes/items.js';
+import aiRouter from './routes/ai.js';
 
 dotenv.config();
 
@@ -45,6 +46,7 @@ app.use((req, res, next) => {
 app.use('/api/trips', tripsRouter);
 app.use('/api/destinations', destinationsRouter);
 app.use('/api/items', itemsRouter);
+app.use('/api/ai', aiRouter);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
