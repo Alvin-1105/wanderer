@@ -1,6 +1,24 @@
 import { Trip, Destination, ItineraryItem, Transportation } from './types';
 import { supabase } from './lib/supabaseClient';
 
+const toCamelCase = (str: string) => str.replace(/_([a-z])/g, (g) => g[1].toUpperCase());
+const transformKeys = (obj: any): any => {
+  if (Array.isArray(obj)) return obj.map((v) => transformKeys(v));
+  if (obj !== null && typeof obj === 'object') {
+    return Object.keys(obj).reduce((acc, key) => {
+      if (key === 'transportationBetweenDestinations') {
+        const transformedObj: any = {};
+        for (const k in obj[key]) transformedObj[k] = transformKeys(obj[key][k]);
+        acc[key] = transformedObj;
+      } else {
+        acc[toCamelCase(key)] = transformKeys(obj[key]);
+      }
+      return acc;
+    }, {} as any);
+  }
+  return obj;
+};
+
 const API_BASE = '/api';
 
 const getAuthHeaders = async () => {
@@ -16,7 +34,7 @@ export const fetchTrips = async (): Promise<Trip[]> => {
     headers: await getAuthHeaders(),
   });
   if (!res.ok) throw new Error('Failed to fetch trips');
-  return res.json();
+  return transformKeys(await res.json());
 };
 
 export const createTrip = async (tripData: Partial<Trip>): Promise<Trip> => {
@@ -26,7 +44,7 @@ export const createTrip = async (tripData: Partial<Trip>): Promise<Trip> => {
     body: JSON.stringify(tripData),
   });
   if (!res.ok) throw new Error('Failed to create trip');
-  return res.json();
+  return transformKeys(await res.json());
 };
 
 export const updateTrip = async (id: string, tripData: Partial<Trip>): Promise<Trip> => {
@@ -36,7 +54,7 @@ export const updateTrip = async (id: string, tripData: Partial<Trip>): Promise<T
     body: JSON.stringify(tripData),
   });
   if (!res.ok) throw new Error('Failed to update trip');
-  return res.json();
+  return transformKeys(await res.json());
 };
 
 export const deleteTrip = async (id: string): Promise<void> => {
@@ -54,7 +72,7 @@ export const createDestination = async (tripId: string, destData: Partial<Destin
     body: JSON.stringify({ ...destData, trip_id: tripId }),
   });
   if (!res.ok) throw new Error('Failed to create destination');
-  return res.json();
+  return transformKeys(await res.json());
 };
 
 export const updateDestination = async (id: string, destData: Partial<Destination>): Promise<Destination> => {
@@ -64,7 +82,7 @@ export const updateDestination = async (id: string, destData: Partial<Destinatio
     body: JSON.stringify(destData),
   });
   if (!res.ok) throw new Error('Failed to update destination');
-  return res.json();
+  return transformKeys(await res.json());
 };
 
 export const deleteDestination = async (id: string): Promise<void> => {
@@ -82,7 +100,7 @@ export const createItem = async (destinationId: string, itemData: any): Promise<
     body: JSON.stringify({ ...itemData, destination_id: destinationId }),
   });
   if (!res.ok) throw new Error('Failed to create item');
-  return res.json();
+  return transformKeys(await res.json());
 };
 
 export const updateItem = async (id: string, itemData: any): Promise<ItineraryItem> => {
@@ -92,7 +110,7 @@ export const updateItem = async (id: string, itemData: any): Promise<ItineraryIt
     body: JSON.stringify(itemData),
   });
   if (!res.ok) throw new Error('Failed to update item');
-  return res.json();
+  return transformKeys(await res.json());
 };
 
 export const deleteItem = async (id: string): Promise<void> => {
@@ -110,7 +128,7 @@ export const createTransportationBetween = async (tripId: string, fromDestId: st
     body: JSON.stringify({ ...itemData, trip_id: tripId, from_destination_id: fromDestId, to_destination_id: toDestId }),
   });
   if (!res.ok) throw new Error('Failed to create transportation between');
-  return res.json();
+  return transformKeys(await res.json());
 };
 
 export const deleteTransportationBetween = async (id: string): Promise<void> => {
