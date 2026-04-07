@@ -72,8 +72,8 @@ export const AddTransportationScreen: React.FC<AddTransportationScreenProps> = (
               <div className="flex gap-2">
                 <input 
                   type="number"
-                  value={formData.duration}
-                  onChange={(e) => setFormData({ ...formData, duration: Number(e.target.value) })}
+                  value={formData.duration || ''}
+                  onChange={(e) => setFormData({ ...formData, duration: e.target.value as unknown as number })}
                   className="flex-grow px-4 py-3 rounded-xl border border-border bg-white focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all text-sm"
                 />
                 <select 
@@ -91,8 +91,8 @@ export const AddTransportationScreen: React.FC<AddTransportationScreenProps> = (
               <label className="text-sm font-bold text-primary uppercase tracking-widest">Budget ($)</label>
               <input 
                 type="number"
-                value={formData.budget}
-                onChange={(e) => setFormData({ ...formData, budget: Number(e.target.value) })}
+                value={formData.budget || ''}
+                onChange={(e) => setFormData({ ...formData, budget: e.target.value as unknown as number })}
                 className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all text-sm"
               />
             </div>

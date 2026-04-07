@@ -62,8 +62,8 @@ export const AddDestinationScreen: React.FC<AddDestinationScreenProps> = ({ dest
               <label className="text-sm font-bold text-primary uppercase tracking-widest">Duration (Days)</label>
               <input 
                 type="number"
-                value={formData.duration}
-                onChange={(e) => setFormData({ ...formData, duration: Number(e.target.value) })}
+                value={formData.duration || ''}
+                onChange={(e) => setFormData({ ...formData, duration: e.target.value as unknown as number })}
                 className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all text-sm"
               />
             </div>
@@ -71,8 +71,8 @@ export const AddDestinationScreen: React.FC<AddDestinationScreenProps> = ({ dest
               <label className="text-sm font-bold text-primary uppercase tracking-widest">Planned Budget ($)</label>
               <input 
                 type="number"
-                value={formData.budget}
-                onChange={(e) => setFormData({ ...formData, budget: Number(e.target.value) })}
+                value={formData.budget || ''}
+                onChange={(e) => setFormData({ ...formData, budget: e.target.value as unknown as number })}
                 className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all text-sm"
               />
             </div>

@@ -109,8 +109,8 @@ export const EditTripScreen: React.FC<EditTripScreenProps> = ({ trip, onBack, on
               <label className="text-sm font-bold text-primary uppercase tracking-widest">Total Budget ($)</label>
               <input 
                 type="number"
-                value={formData.budget}
-                onChange={(e) => setFormData({ ...formData, budget: Number(e.target.value) })}
+                value={formData.budget || ''}
+                onChange={(e) => setFormData({ ...formData, budget: e.target.value as unknown as number })}
                 className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all text-sm"
               />
             </div>
