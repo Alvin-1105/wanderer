@@ -57,7 +57,7 @@ You MUST return ONLY valid JSON matching this exact structure:
 {
   "title": "A catchy title for the trip",
   "description": "A rich, enthusiastic overview of the entire trip, explaining WHY it matches the user's motivation, cultural distance, and budget.",
-  "coverImage": "MUST be exactly: https://image.pollinations.ai/prompt/{highly_detailed_scenic_description_of_the_overall_trip_destination_keyword_escaped}?width=1200&height=800&nologo=true",
+  "coverImage": "MUST be exactly: https://loremflickr.com/1200/800/{keyword1},{keyword2}/all (replace keywords with 2-3 single-word tags representing the destination, separated by commas, NO SPACES OR UNDERSCORES)",
   "startDate": "YYYY-MM-DD",
   "endDate": "YYYY-MM-DD",
   "budget": number (total planned budget),
@@ -66,14 +66,14 @@ You MUST return ONLY valid JSON matching this exact structure:
       "city": "City name",
       "country": "Country name",
       "description": "Why this city is chosen",
-      "coverImage": "MUST be exactly: https://image.pollinations.ai/prompt/{highly_detailed_description_of_this_city_landmark_escaped}?width=1000&height=600&nologo=true",
+      "coverImage": "MUST be exactly: https://loremflickr.com/1000/600/{city_name},{landmark}/all (single words only, separated by commas, NO SPACES)",
       "budget": number,
       "items": [
         {
           "type": "activity",
           "title": "Activity name",
           "description": "Engaging description",
-          "image": "MUST be exactly: https://image.pollinations.ai/prompt/{highly_detailed_description_of_this_specific_activity_escaped}?width=800&height=500&nologo=true",
+          "image": "MUST be exactly: https://loremflickr.com/800/500/{activity_theme},{city}/all (single words only, separated by commas, NO SPACES)",
           "budget": number,
           "duration": number,
           "durationUnit": "Hours",
