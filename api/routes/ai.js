@@ -68,6 +68,7 @@ You MUST return ONLY valid JSON matching this exact structure:
       "description": "Why this city is chosen",
       "coverImage": "MUST be exactly: https://loremflickr.com/1000/600/{city_name},{landmark}/all (single words only, separated by commas, NO SPACES)",
       "budget": number,
+      "duration": number (number of days to stay here),
       "items": [
         {
           "type": "activity",
@@ -113,12 +114,18 @@ DO NOT wrap the JSON in Markdown code blocks like \`\`\`json. Just return the ra
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
+    // Calculate trip duration natively based on dates
+    const startObj = new Date(tripData.startDate);
+    const endObj = new Date(tripData.endDate);
+    const tripDurationDays = Math.max(1, Math.ceil((endObj - startObj) / (1000 * 60 * 60 * 24)) + 1);
+
     const tripInsert = {
       title: tripData.title,
       description: tripData.description,
       cover_image: tripData.coverImage,
       start_date: tripData.startDate,
       end_date: tripData.endDate,
+      duration: tripDurationDays,
       budget: tripData.budget || 0,
       status: 'Planning Phase',
       user_id: userId
@@ -140,6 +147,7 @@ DO NOT wrap the JSON in Markdown code blocks like \`\`\`json. Just return the ra
           country: d.country,
           description: d.description,
           cover_image: d.coverImage,
+          duration: d.duration || 1,
           budget: d.budget || 0,
           user_id: userId
         };
