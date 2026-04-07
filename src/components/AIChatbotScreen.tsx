@@ -16,6 +16,47 @@ interface AIChatbotScreenProps {
   contextTrip?: Trip;
 }
 
+const ChatInputArea: React.FC<{
+  onSend: (text: string) => void;
+  disabled: boolean;
+}> = ({ onSend, disabled }) => {
+  const [input, setInput] = useState('');
+
+  const handleSend = () => {
+    if (!input.trim() || disabled) return;
+    onSend(input.trim());
+    setInput('');
+  };
+
+  return (
+    <div className="bg-white p-4 border-t border-border shrink-0">
+      <div className="max-w-4xl mx-auto relative">
+        <textarea 
+          rows={3}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) { 
+              e.preventDefault(); 
+              handleSend(); 
+            }
+          }}
+          placeholder="Type your reply here... (Shift+Enter for a new line)"
+          className="w-full bg-surface border border-border rounded-2xl px-6 py-4 outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors pr-16 resize-none text-base"
+          disabled={disabled}
+        />
+        <button 
+          onClick={handleSend}
+          disabled={!input.trim() || disabled}
+          className="absolute right-3 bottom-3 p-3 bg-accent hover:bg-accent/90 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-xl transition-colors shadow-sm"
+        >
+          <Send className="w-5 h-5" />
+        </button>
+      </div>
+    </div>
+  );
+};
+
 export const AIChatbotScreen: React.FC<AIChatbotScreenProps> = ({ onBack, onTripGenerated, contextTrip }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -26,7 +67,6 @@ export const AIChatbotScreen: React.FC<AIChatbotScreenProps> = ({ onBack, onTrip
         : "Hello! I'm your professional AI travel assistant. Where are you dreaming of going, and what kind of experience are you looking for?"
     }
   ]);
-  const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isGeneratingTrip, setIsGeneratingTrip] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -39,14 +79,13 @@ export const AIChatbotScreen: React.FC<AIChatbotScreenProps> = ({ onBack, onTrip
     scrollToBottom();
   }, [messages, isLoading, isGeneratingTrip]);
 
-  const handleSend = async () => {
-    if (!input.trim() || isLoading || isGeneratingTrip) return;
+  const handleSend = async (text: string) => {
+    if (isLoading || isGeneratingTrip) return;
 
-    const userMessage: Message = { id: Date.now().toString(), role: 'user', content: input.trim() };
+    const userMessage: Message = { id: Date.now().toString(), role: 'user', content: text };
     const newMessages = [...messages, userMessage];
     
     setMessages(newMessages);
-    setInput('');
     setIsLoading(true);
 
     try {
@@ -177,31 +216,10 @@ export const AIChatbotScreen: React.FC<AIChatbotScreenProps> = ({ onBack, onTrip
       </div>
 
       {/* Input Area */}
-      <div className="bg-white p-4 border-t border-border shrink-0">
-        <div className="max-w-4xl mx-auto relative">
-          <textarea 
-            rows={3}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) { 
-                e.preventDefault(); 
-                handleSend(); 
-              }
-            }}
-            placeholder="Type your reply here... (Shift+Enter for a new line)"
-            className="w-full bg-surface border border-border rounded-2xl px-6 py-4 outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all pr-16 resize-none text-base"
-            disabled={isLoading || isGeneratingTrip}
-          />
-          <button 
-            onClick={handleSend}
-            disabled={!input.trim() || isLoading || isGeneratingTrip}
-            className="absolute right-3 bottom-3 p-3 bg-accent hover:bg-accent/90 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-xl transition-colors shadow-sm"
-          >
-            <Send className="w-5 h-5" />
-          </button>
-        </div>
-      </div>
+      <ChatInputArea 
+        onSend={handleSend} 
+        disabled={isLoading || isGeneratingTrip} 
+      />
     </div>
   );
 };
